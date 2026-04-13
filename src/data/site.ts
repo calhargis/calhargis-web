@@ -14,20 +14,20 @@ export const siteData = {
       "AWS, Spark, and Data Pipeline Builder",
     ],
     intro:
-      "Currently building resident-facing applications and internal management tools at Kingsley Management Corporation.",
+      "Full-stack developer building resident-facing applications and internal management tools at Kingsley Management Corporation.",
     summary:
-      "My recent work centers on Laravel, Vue.js, MySQL, and Flutter, with earlier experience spanning AWS data pipelines, large-scale Java services, technical support across web and mobile platforms, and machine-learning research.",
+      "I design and ship production features across Laravel, Vue.js, MySQL, and Flutter, with earlier experience in AWS data pipelines, Java services, technical support across web and mobile platforms, and machine-learning research.",
     facts: [
       {
         label: "Current role",
-        value: "Fullstack Software Developer at Kingsley",
+        value: "Full-Stack Developer at Kingsley",
       },
       {
         label: "Core stack",
         value: "Laravel, Vue.js, MySQL, Flutter",
       },
       {
-        label: "Education",
+        label: "Foundation",
         value: "B.S. in Computer Science, BYU",
       },
     ],
@@ -47,31 +47,52 @@ export const siteData = {
     },
   ],
   experience: {
-    featured: {
-      role: "Fullstack Software Developer",
+    kingsley: {
+      role: "Full-Stack Software Developer",
       company: "Kingsley Management Corporation",
       location: "Provo, UT",
       dates: "Apr 2025 - Present",
-      summary:
-        "Designed and implemented full-stack features for internal management tools and resident-facing applications, owning frontend UX, backend APIs, and database architecture across the work.",
-      achievements: [
-        "Built production features using Laravel (PHP), Vue.js, MySQL, and Flutter.",
-        "Developed and maintained RESTful backend services with Laravel Controllers, Models, and Service layers to keep the codebase clean and maintainable.",
-        "Delivered functionality across internal property management systems and resident-facing web portals.",
-        "Implemented and managed relational database schemas and queries in MySQL to preserve integrity across financial, resident, and property records.",
+      intro:
+        "Build and maintain resident-facing applications and internal management tools, working across Laravel, Vue.js, MySQL, and Flutter in production.",
+      highlights: [
+        "Develop full-stack features from interface to API to database for day-to-day property management workflows.",
+        "Maintain RESTful backend services with Laravel controllers, models, and service-layer patterns to keep the codebase organized and maintainable.",
+        "Design and manage MySQL schemas, relationships, and queries across financial, resident, and property data.",
       ],
-      spotlight: {
-        title: "Security deposit and refund system",
-        impact:
-          "Led development of an online security deposit and refund workflow that replaced a legacy paper-check process with a fully digital solution.",
-        details: [
-          "Improved processing speed and reliability for a business-critical financial workflow.",
-          "Supported more than $100,000 in monthly processing volume.",
-          "Combined frontend, backend, and database work into a single end-to-end feature.",
-        ],
-      },
+      focusAreas: [
+        {
+          label: "Application delivery",
+          title: "Resident-facing and internal software",
+          body:
+            "Own production work across the UI, backend, and database layers for both customer-facing and operational systems.",
+          bullets: [
+            "Build and refine features in Laravel, Vue.js, and Flutter.",
+            "Ship tools used by residents and internal property-management teams.",
+          ],
+        },
+        {
+          label: "Backend systems",
+          title: "REST APIs and MySQL architecture",
+          body:
+            "Handle the backend responsibilities that keep business workflows reliable and maintainable.",
+          bullets: [
+            "Implement service-layer backend logic and REST endpoints in Laravel.",
+            "Model relational data and write queries that preserve integrity across core business records.",
+          ],
+        },
+        {
+          label: "Feature spotlight",
+          title: "Security deposit and refund system",
+          body:
+            "Led development of an online security deposit and refund workflow that replaced a legacy paper-check process with a digital system.",
+          bullets: [
+            "Supported more than $100,000 in monthly processing volume.",
+            "Improved speed, reliability, and day-to-day usability for a business-critical financial workflow.",
+          ],
+        },
+      ],
     },
-    supporting: [
+    earlierExperience: [
       {
         role: "Application Support Analyst",
         company: "JobNimbus",

@@ -95,56 +95,78 @@ const resumeHref = `${assetBase}resume.pdf`;
       <section class="section" id="experience">
         <div class="section-heading reveal" data-reveal>
           <p class="eyebrow">Experience</p>
-          <h2>Recent work with the strongest emphasis on Kingsley</h2>
+          <h2>Full-stack product work at Kingsley</h2>
           <p>
-            My most relevant development experience is my current role at Kingsley,
-            where I am building full-stack production features across resident-facing
-            applications and internal management systems.
+            My current role at Kingsley is the clearest picture of the kind of developer
+            I am: shipping production features across resident-facing applications,
+            internal management tools, backend services, and database-backed workflows.
           </p>
         </div>
 
-        <div class="experience-grid">
-          <article class="feature-card feature-card--primary reveal" data-reveal>
+        <div class="kingsley-layout">
+          <article
+            class="feature-card feature-card--primary kingsley-overview reveal"
+            data-reveal
+          >
             <div class="feature-card__meta">
               <div>
-                <p class="feature-card__role">{siteData.experience.featured.role}</p>
-                <h3>{siteData.experience.featured.company}</h3>
+                <p class="feature-card__role">{siteData.experience.kingsley.role}</p>
+                <h3>{siteData.experience.kingsley.company}</h3>
               </div>
               <div class="meta-badges">
-                <span>{siteData.experience.featured.dates}</span>
-                <span>{siteData.experience.featured.location}</span>
+                <span>{siteData.experience.kingsley.dates}</span>
+                <span>{siteData.experience.kingsley.location}</span>
               </div>
             </div>
 
             <p class="feature-card__summary">
-              {siteData.experience.featured.summary}
+              {siteData.experience.kingsley.intro}
             </p>
 
             <ul class="accent-list">
-              {siteData.experience.featured.achievements.map((achievement) => (
-                <li>{achievement}</li>
+              {siteData.experience.kingsley.highlights.map((highlight) => (
+                <li>{highlight}</li>
               ))}
             </ul>
           </article>
 
-          <article class="feature-card feature-card--spotlight reveal" data-reveal>
-            <p class="eyebrow">Feature spotlight</p>
-            <h3>{siteData.experience.featured.spotlight.title}</h3>
-            <p class="feature-card__summary">
-              {siteData.experience.featured.spotlight.impact}
-            </p>
+          <div class="kingsley-grid">
+            {siteData.experience.kingsley.focusAreas.map((area) => (
+              <article
+                class:list={[
+                  "feature-card",
+                  "kingsley-card",
+                  area.label === "Feature spotlight" && "feature-card--spotlight",
+                  "reveal",
+                ]}
+                data-reveal
+              >
+                <p class="eyebrow">{area.label}</p>
+                <h3>{area.title}</h3>
+                <p class="feature-card__summary">{area.body}</p>
 
-            <ul class="accent-list">
-              {siteData.experience.featured.spotlight.details.map((detail) => (
-                <li>{detail}</li>
-              ))}
-            </ul>
-          </article>
+                <ul class="accent-list">
+                  {area.bullets.map((bullet) => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
         </div>
 
-        <div class="supporting-grid">
-          {siteData.experience.supporting.map((job) => (
-            <article class="feature-card reveal" data-reveal>
+        <div class="section-heading section-heading--sub reveal" data-reveal>
+          <p class="eyebrow">Earlier experience</p>
+          <h2>Additional engineering and technical background</h2>
+          <p>
+            Earlier roles added backend depth, customer-facing troubleshooting, and
+            research experience that still shape how I build production software.
+          </p>
+        </div>
+
+        <div class="supporting-grid supporting-grid--experience">
+          {siteData.experience.earlierExperience.map((job) => (
+            <article class="feature-card feature-card--supporting reveal" data-reveal>
               <div class="feature-card__meta">
                 <div>
                   <p class="feature-card__role">{job.role}</p>
@@ -171,8 +193,9 @@ const resumeHref = `${assetBase}resume.pdf`;
           <p class="eyebrow">Education</p>
           <h2>Computer science foundation</h2>
           <p>
-            My formal background is a B.S. in Computer Science from BYU, with coursework
-            that maps directly to software engineering, testing, UX, algorithms, and machine learning.
+            The formal foundation behind that work is a B.S. in Computer Science from
+            BYU, with coursework that maps directly to software engineering, testing,
+            UX, algorithms, and machine learning.
           </p>
         </div>
 
@@ -213,7 +236,8 @@ const resumeHref = `${assetBase}resume.pdf`;
           <p class="eyebrow">Projects</p>
           <h2>Software projects and published research</h2>
           <p>
-            After my professional experience and education, these projects and publications give a broader picture of how I work.
+            Beyond my professional experience, these projects and publications show how
+            I approach architecture, experimentation, and technical depth.
           </p>
         </div>
 
@@ -273,7 +297,8 @@ const resumeHref = `${assetBase}resume.pdf`;
           <p class="eyebrow">Skills</p>
           <h2>Skills and tech stack</h2>
           <p>
-            This section mirrors the skills-and-stack treatment you pointed at, but tuned to your resume, experience, and the synthwave look of this site.
+            These are the technologies I use most often in production and the adjacent
+            tools I have worked with across frontend, backend, data, and cloud work.
           </p>
         </div>
 
@@ -335,11 +360,58 @@ const resumeHref = `${assetBase}resume.pdf`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealItems = document.querySelectorAll("[data-reveal]");
     const glowButtons = document.querySelectorAll(".button");
+    const typewriterWrap = document.querySelector(".hero__typewriter");
     const typewriterEl = document.getElementById("typewriter");
+    const typewriterCursor = document.querySelector(".typewriter-cursor");
     let phraseIndex = 0;
     let charIndex = 0;
     let deleting = false;
     let pauseEnd = 0;
+    let fitFrame = 0;
+
+    const fitTypewriterLine = () => {
+      if (
+        !(typewriterWrap instanceof HTMLElement) ||
+        !(typewriterEl instanceof HTMLElement)
+      ) {
+        return;
+      }
+
+      typewriterEl.style.fontSize = "";
+      typewriterEl.style.letterSpacing = "";
+
+      const cursorWidth =
+        typewriterCursor instanceof HTMLElement
+          ? typewriterCursor.getBoundingClientRect().width
+          : 0;
+      const availableWidth = Math.max(typewriterWrap.clientWidth - cursorWidth - 8, 0);
+
+      if (!availableWidth) {
+        return;
+      }
+
+      const contentWidth = typewriterEl.scrollWidth;
+      if (contentWidth <= availableWidth) {
+        return;
+      }
+
+      const baseSize = parseFloat(getComputedStyle(typewriterEl).fontSize);
+      const scale = availableWidth / contentWidth;
+      const nextSize = Math.max(10, baseSize * scale);
+
+      typewriterEl.style.fontSize = `${nextSize}px`;
+
+      if (scale < 0.8) {
+        typewriterEl.style.letterSpacing = "0.03em";
+      } else if (scale < 0.9) {
+        typewriterEl.style.letterSpacing = "0.05em";
+      }
+    };
+
+    const scheduleTypewriterFit = () => {
+      cancelAnimationFrame(fitFrame);
+      fitFrame = requestAnimationFrame(fitTypewriterLine);
+    };
 
     const runTypewriter = () => {
       if (!(typewriterEl instanceof HTMLElement) || !typePhrases.length) {
@@ -356,6 +428,7 @@ const resumeHref = `${assetBase}resume.pdf`;
 
       if (!deleting) {
         typewriterEl.textContent = current.slice(0, charIndex + 1);
+        scheduleTypewriterFit();
         charIndex += 1;
 
         if (charIndex === current.length) {
@@ -365,6 +438,7 @@ const resumeHref = `${assetBase}resume.pdf`;
       } else {
         charIndex -= 1;
         typewriterEl.textContent = current.slice(0, charIndex);
+        scheduleTypewriterFit();
 
         if (charIndex === 0) {
           deleting = false;
@@ -381,6 +455,7 @@ const resumeHref = `${assetBase}resume.pdf`;
       revealItems.forEach((item) => item.classList.add("is-visible"));
       if (typewriterEl instanceof HTMLElement && typePhrases.length) {
         typewriterEl.textContent = typePhrases[0];
+        scheduleTypewriterFit();
       }
     } else {
       const observer = new IntersectionObserver(
@@ -404,6 +479,8 @@ const resumeHref = `${assetBase}resume.pdf`;
         requestAnimationFrame(runTypewriter);
       }
     }
+
+    window.addEventListener("resize", scheduleTypewriterFit, { passive: true });
 
     glowButtons.forEach((button) => {
       if (!(button instanceof HTMLElement)) {

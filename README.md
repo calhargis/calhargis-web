@@ -2,6 +2,8 @@
 
 Personal portfolio site for Cal Hargis, built with Astro and styled with a synthwave-inspired visual system.
 
+Live site: https://calhargis.github.io/calhargis-web/
+
 ## Local Development
 
 ```bash
