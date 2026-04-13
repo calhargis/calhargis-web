@@ -109,7 +109,7 @@ const resumeHref = `${assetBase}resume.pdf`;
             data-reveal
           >
             <div class="feature-card__meta">
-              <div>
+              <div class="feature-card__identity">
                 <p class="feature-card__role">{siteData.experience.kingsley.role}</p>
                 <h3>{siteData.experience.kingsley.company}</h3>
               </div>
@@ -168,9 +168,9 @@ const resumeHref = `${assetBase}resume.pdf`;
           {siteData.experience.earlierExperience.map((job) => (
             <article class="feature-card feature-card--supporting reveal" data-reveal>
               <div class="feature-card__meta">
-                <div>
+                <div class="feature-card__identity">
                   <p class="feature-card__role">{job.role}</p>
-                  <h3>{job.company}</h3>
+                  <h3 data-fit-single-line data-fit-min="18">{job.company}</h3>
                 </div>
                 <div class="meta-badges">
                   <span>{job.dates}</span>
@@ -360,6 +360,9 @@ const resumeHref = `${assetBase}resume.pdf`;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealItems = document.querySelectorAll("[data-reveal]");
     const glowButtons = document.querySelectorAll(".button");
+    const topbar = document.querySelector(".topbar");
+    const navLinks = [...document.querySelectorAll('.topbar__nav a[href^="#"]')];
+    const fitSingleLineItems = [...document.querySelectorAll("[data-fit-single-line]")];
     const typewriterWrap = document.querySelector(".hero__typewriter");
     const typewriterEl = document.getElementById("typewriter");
     const typewriterCursor = document.querySelector(".typewriter-cursor");
@@ -368,6 +371,27 @@ const resumeHref = `${assetBase}resume.pdf`;
     let deleting = false;
     let pauseEnd = 0;
     let fitFrame = 0;
+    let navFrame = 0;
+
+    const trackedSections = navLinks
+      .map((link) => {
+        if (!(link instanceof HTMLAnchorElement)) {
+          return null;
+        }
+
+        const id = link.getAttribute("href")?.slice(1);
+        if (!id) {
+          return null;
+        }
+
+        const section = document.getElementById(id);
+        if (!(section instanceof HTMLElement)) {
+          return null;
+        }
+
+        return { id, link, section };
+      })
+      .filter(Boolean);
 
     const fitTypewriterLine = () => {
       if (
@@ -411,6 +435,77 @@ const resumeHref = `${assetBase}resume.pdf`;
     const scheduleTypewriterFit = () => {
       cancelAnimationFrame(fitFrame);
       fitFrame = requestAnimationFrame(fitTypewriterLine);
+    };
+
+    const fitSingleLineText = (element) => {
+      if (!(element instanceof HTMLElement)) {
+        return;
+      }
+
+      const container = element.parentElement;
+      if (!(container instanceof HTMLElement)) {
+        return;
+      }
+
+      element.style.fontSize = "";
+      element.style.letterSpacing = "";
+
+      const availableWidth = container.clientWidth;
+      if (!availableWidth) {
+        return;
+      }
+
+      const contentWidth = element.scrollWidth;
+      if (contentWidth <= availableWidth) {
+        return;
+      }
+
+      const baseSize = parseFloat(getComputedStyle(element).fontSize);
+      const scale = availableWidth / contentWidth;
+      const minSize = Number.parseFloat(element.dataset.fitMin ?? "16");
+      const nextSize = Math.max(minSize, baseSize * scale);
+
+      element.style.fontSize = `${nextSize}px`;
+
+      if (scale < 0.88) {
+        element.style.letterSpacing = "0.04em";
+      }
+    };
+
+    const syncSingleLineText = () => {
+      fitSingleLineItems.forEach(fitSingleLineText);
+    };
+
+    const setActiveNavLink = (activeId) => {
+      trackedSections.forEach(({ id, link }) => {
+        const isActive = id === activeId;
+        link.classList.toggle("is-active", isActive);
+
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const syncActiveNav = () => {
+      const topbarHeight = topbar instanceof HTMLElement ? topbar.offsetHeight : 0;
+      const scrollLine = window.scrollY + topbarHeight + 64;
+      let activeId = "";
+
+      trackedSections.forEach(({ id, section }) => {
+        if (section.offsetTop <= scrollLine) {
+          activeId = id;
+        }
+      });
+
+      setActiveNavLink(activeId);
+    };
+
+    const scheduleNavSync = () => {
+      cancelAnimationFrame(navFrame);
+      navFrame = requestAnimationFrame(syncActiveNav);
     };
 
     const runTypewriter = () => {
@@ -481,6 +576,20 @@ const resumeHref = `${assetBase}resume.pdf`;
     }
 
     window.addEventListener("resize", scheduleTypewriterFit, { passive: true });
+    window.addEventListener("resize", syncSingleLineText, { passive: true });
+    window.addEventListener("resize", scheduleNavSync, { passive: true });
+    window.addEventListener("scroll", scheduleNavSync, { passive: true });
+
+    syncSingleLineText();
+    scheduleNavSync();
+
+    if ("fonts" in document) {
+      document.fonts.ready.then(() => {
+        scheduleTypewriterFit();
+        syncSingleLineText();
+        scheduleNavSync();
+      });
+    }
 
     glowButtons.forEach((button) => {
       if (!(button instanceof HTMLElement)) {

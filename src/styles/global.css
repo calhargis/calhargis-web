@@ -239,6 +239,7 @@ select {
 .topbar__nav a {
   flex: 0 0 auto;
   padding: 0.65rem 0.85rem;
+  border: 1px solid transparent;
   border-radius: 999px;
   color: var(--muted);
   font-size: 0.68rem;
@@ -246,6 +247,8 @@ select {
   text-transform: uppercase;
   transition:
     color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
     background-color 180ms ease,
     transform 180ms ease;
 }
@@ -256,6 +259,17 @@ select {
 .footer__links a:focus-visible {
   color: var(--text);
   background: rgba(255, 255, 255, 0.06);
+}
+
+.topbar__nav a.is-active,
+.topbar__nav a[aria-current="location"] {
+  color: var(--text);
+  border-color: rgba(102, 244, 255, 0.32);
+  background:
+    linear-gradient(180deg, rgba(102, 244, 255, 0.18), rgba(255, 255, 255, 0.05));
+  box-shadow:
+    0 0 20px rgba(102, 244, 255, 0.16),
+    inset 0 0 18px rgba(255, 255, 255, 0.04);
 }
 
 .section {
@@ -612,6 +626,11 @@ select {
   align-items: flex-start;
 }
 
+.feature-card__identity {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .feature-card__role,
 .project-card__stack {
   margin: 0 0 0.6rem;
@@ -627,6 +646,14 @@ select {
   font-size: 1.45rem;
   line-height: 1.15;
   overflow-wrap: anywhere;
+}
+
+[data-fit-single-line] {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-wrap: normal;
+  text-overflow: clip;
 }
 
 .meta-badges {
