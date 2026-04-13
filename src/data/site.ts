@@ -106,6 +106,7 @@ export const siteData = {
       {
         role: "Software Engineer Intern",
         company: "FamilySearch",
+        companyFitMin: 18,
         location: "Lehi, UT",
         dates: "May 2023 - Dec 2023",
         bullets: [
@@ -116,7 +117,7 @@ export const siteData = {
       },
       {
         role: "Research Assistant",
-        company: "Brigham Young University",
+        company: "BYU",
         location: "Provo, UT",
         dates: "Apr 2020 - Dec 2022",
         bullets: [
@@ -207,6 +208,8 @@ export const siteData = {
       items: [
         { label: "PHP", icon: "php" },
         { label: "Laravel", icon: "laravel" },
+        { label: "ASP.NET Core", icon: "dotnet" },
+        { label: "C#", icon: "csharp" },
         { label: "Python", icon: "python" },
         { label: "Java", icon: "java" },
         { label: "Spring Boot", icon: "springboot" },
@@ -217,9 +220,10 @@ export const siteData = {
       title: "Backend Architecture",
       items: [
         { label: "REST APIs", icon: "api" },
+        { label: "SignalR", icon: "signalr" },
         { label: "MVC Architecture", icon: "layers" },
         { label: "Service Layer Design", icon: "service" },
-        { label: "Authentication", icon: "shield" },
+        { label: "OAuth / JWT", icon: "shield" },
         { label: "Data Modeling", icon: "model" },
       ],
     },
@@ -227,6 +231,9 @@ export const siteData = {
       title: "Databases And Cloud",
       items: [
         { label: "MySQL", icon: "mysql" },
+        { label: "PostgreSQL", icon: "postgresql" },
+        { label: "Redis", icon: "redis" },
+        { label: "MinIO", icon: "minio" },
         { label: "SQL", icon: "database" },
         { label: "AWS", icon: "aws" },
       ],
@@ -244,6 +251,8 @@ export const siteData = {
       title: "Tools And Practices",
       items: [
         { label: "Git", icon: "git" },
+        { label: "Docker", icon: "docker" },
+        { label: "Raspberry Pi", icon: "raspberrypi" },
         { label: "Agile / Scrum", icon: "agile" },
         { label: "Linux", icon: "linux" },
         { label: "Codex", icon: "openai" },

@@ -181,7 +181,12 @@ const progressBarSegments = Array.from({ length: 32 }, (_, index) => index);
               <div class="feature-card__meta">
                 <div class="feature-card__identity">
                   <p class="feature-card__role">{job.role}</p>
-                  <h3 data-fit-single-line data-fit-min="18">{job.company}</h3>
+                  <h3
+                    data-fit-single-line
+                    data-fit-min={"companyFitMin" in job ? job.companyFitMin : 18}
+                  >
+                    {job.company}
+                  </h3>
                 </div>
                 <div class="meta-badges">
                   <span>{job.dates}</span>
