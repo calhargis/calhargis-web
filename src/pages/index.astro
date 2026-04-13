@@ -1,0 +1,301 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteData } from "../data/site";
+
+const assetBase = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const resumeHref = `${assetBase}resume.pdf`;
+---
+
+<BaseLayout
+  title={siteData.metadata.title}
+  description={siteData.metadata.description}
+>
+  <div class="page-shell">
+    <div class="scene" aria-hidden="true">
+      <div class="scene__sky"></div>
+      <div class="scene__sun"></div>
+      <div class="scene__glow scene__glow--left"></div>
+      <div class="scene__glow scene__glow--right"></div>
+      <div class="scene__grid"></div>
+      <div class="scene__scanlines"></div>
+      <div class="scene__noise"></div>
+    </div>
+
+    <header class="topbar">
+      <a class="topbar__brand" href="#top">
+        <span class="topbar__brand-mark">CH</span>
+        <span class="topbar__brand-copy">
+          <span>{siteData.hero.name}</span>
+          <span>{siteData.hero.role}</span>
+        </span>
+      </a>
+
+      <nav class="topbar__nav" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#resume">Resume</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero section" id="top">
+        <div class="hero__copy reveal" data-reveal>
+          <p class="eyebrow">Synthwave signal / Developer portfolio</p>
+          <h1>{siteData.hero.headline}</h1>
+          <p class="hero__lede">{siteData.hero.summary}</p>
+          <p class="hero__status">{siteData.hero.status}</p>
+
+          <div class="hero__actions">
+            <a
+              class="button button--primary"
+              href={resumeHref}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View Resume
+            </a>
+            <a class="button button--ghost" href="#projects">Selected Work</a>
+            <a
+              class="button button--ghost"
+              href={siteData.links[0].href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <aside class="hero__panel reveal" data-reveal data-parallax>
+          <div class="hero__panel-header">
+            <p class="eyebrow">Current focus</p>
+            <p class="hero__panel-label">Build software that is dependable, expressive, and worth remembering.</p>
+          </div>
+
+          <div class="proof-grid">
+            {siteData.proofPoints.map((point) => (
+              <article class="proof-card">
+                <h2>{point.title}</h2>
+                <p>{point.detail}</p>
+              </article>
+            ))}
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="about">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">About</p>
+          <h2>What companies should know quickly</h2>
+          <p>
+            I am most interested in roles where engineering quality matters as much as delivery speed.
+            The work I enjoy most lives around backend architecture, infrastructure-aware development,
+            developer tooling, and products with enough personality to stand out.
+          </p>
+        </div>
+
+        <div class="card-grid card-grid--three">
+          {siteData.focusAreas.map((area) => (
+            <article class="info-card reveal" data-reveal>
+              <h3>{area.title}</h3>
+              <p>{area.copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="skills">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">Capabilities</p>
+          <h2>Technical strengths</h2>
+          <p>
+            My strongest work is usually at the intersection of system design, API behavior,
+            infrastructure, and the product surface developers or users actually touch.
+          </p>
+        </div>
+
+        <div class="card-grid card-grid--three">
+          {siteData.skillGroups.map((group) => (
+            <article class="skill-card reveal" data-reveal>
+              <h3>{group.title}</h3>
+              <ul class="tag-list">
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="projects">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">Selected work</p>
+          <h2>Projects that show how I think</h2>
+          <p>
+            These projects are a good snapshot of the kind of engineering work I enjoy:
+            solid systems, useful tooling, and ideas with enough edge to be memorable.
+          </p>
+        </div>
+
+        <div class="project-grid">
+          {siteData.projects.map((project) => (
+            <article class="project-card reveal" data-reveal>
+              <div class="project-card__header">
+                <div>
+                  <p class="project-card__stack">{project.stack}</p>
+                  <h3>{project.name}</h3>
+                </div>
+                <a href={project.href} target="_blank" rel="noreferrer">
+                  Open
+                </a>
+              </div>
+
+              <p class="project-card__summary">{project.description}</p>
+
+              <ul class="project-card__highlights">
+                {project.highlights.map((highlight) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+
+          <article class="project-card project-card--profile reveal" data-reveal>
+            <div class="project-card__header">
+              <div>
+                <p class="project-card__stack">More work</p>
+                <h3>GitHub profile</h3>
+              </div>
+              <a href={siteData.links[0].href} target="_blank" rel="noreferrer">
+                Browse
+              </a>
+            </div>
+
+            <p class="project-card__summary">
+              For more experiments, repos, and in-progress work, my GitHub profile is the best live index.
+            </p>
+
+            <div class="project-card__cta-row">
+              <a class="button button--ghost" href={siteData.links[0].href} target="_blank" rel="noreferrer">
+                Explore GitHub
+              </a>
+              <a class="button button--ghost" href={siteData.links[1].href} target="_blank" rel="noreferrer">
+                View LinkedIn
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--split" id="highlights">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">Highlights</p>
+          <h2>Execution patterns I bring to teams</h2>
+          <p>
+            The common thread in my work is not just shipping features. It is turning complex ideas into
+            systems that are easier to reason about, test, operate, and evolve.
+          </p>
+        </div>
+
+        <div class="split-grid">
+          <article class="info-card reveal" data-reveal>
+            <h3>Recent accomplishments</h3>
+            <ul class="accent-list">
+              {siteData.accomplishments.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="info-card info-card--quote reveal" data-reveal>
+            <p class="eyebrow">Working style</p>
+            <h3>Practical, direct, and quality-minded.</h3>
+            <p>
+              I like strong defaults, explicit tradeoffs, and software that keeps its shape as it grows.
+              If something should feel faster, clearer, or more intentional, I usually want to push it there.
+            </p>
+            <p>
+              That applies to backend behavior, developer workflows, and the front-end details that make a product
+              feel considered instead of assembled.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="resume">
+        <div class="resume-card reveal" data-reveal>
+          <div class="resume-card__copy">
+            <p class="eyebrow">Resume</p>
+            <h2>{siteData.resume.title}</h2>
+            <p>{siteData.resume.copy}</p>
+          </div>
+
+          <div class="resume-card__actions">
+            <a
+              class="button button--primary"
+              href={resumeHref}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View PDF
+            </a>
+            <a class="button button--ghost" href={resumeHref} download>
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Built with Astro and deployed as a static site.</p>
+      <div class="footer__links">
+        {siteData.links.map((link) => (
+          <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
+        ))}
+      </div>
+    </footer>
+  </div>
+
+  <script is:inline>
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealItems = document.querySelectorAll("[data-reveal]");
+
+    if (prefersReducedMotion) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.18,
+          rootMargin: "0px 0px -40px 0px",
+        },
+      );
+
+      revealItems.forEach((item) => observer.observe(item));
+
+      const panel = document.querySelector("[data-parallax]");
+
+      if (panel instanceof HTMLElement) {
+        window.addEventListener("pointermove", (event) => {
+          const x = (event.clientX / window.innerWidth - 0.5) * 10;
+          const y = (event.clientY / window.innerHeight - 0.5) * -10;
+
+          panel.style.setProperty("--tilt-x", `${x.toFixed(2)}deg`);
+          panel.style.setProperty("--tilt-y", `${y.toFixed(2)}deg`);
+        });
+      }
+    }
+  </script>
+</BaseLayout>
