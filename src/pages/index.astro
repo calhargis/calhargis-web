@@ -7,6 +7,7 @@ const assetBase = import.meta.env.BASE_URL.endsWith("/")
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
 const resumeHref = `${assetBase}resume.pdf`;
+const progressBarSegments = Array.from({ length: 32 }, (_, index) => index);
 ---
 
 <BaseLayout
@@ -25,6 +26,16 @@ const resumeHref = `${assetBase}resume.pdf`;
     </div>
 
     <header class="topbar">
+      <div class="topbar__progress" aria-hidden="true">
+        <div class="topbar__progress-track">
+          <div class="topbar__progress-segments">
+            {progressBarSegments.map((segment) => (
+              <span class="topbar__progress-segment" data-progress-segment={segment}></span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <a class="topbar__brand" href="#top">
         <span class="topbar__brand-mark">CH</span>
         <span class="topbar__brand-copy">
@@ -363,6 +374,7 @@ const resumeHref = `${assetBase}resume.pdf`;
     const topbar = document.querySelector(".topbar");
     const navLinks = [...document.querySelectorAll('.topbar__nav a[href^="#"]')];
     const fitSingleLineItems = [...document.querySelectorAll("[data-fit-single-line]")];
+    const progressSegmentEls = [...document.querySelectorAll(".topbar__progress-segment")];
     const typewriterWrap = document.querySelector(".hero__typewriter");
     const typewriterEl = document.getElementById("typewriter");
     const typewriterCursor = document.querySelector(".typewriter-cursor");
@@ -489,15 +501,49 @@ const resumeHref = `${assetBase}resume.pdf`;
       });
     };
 
-    const syncActiveNav = () => {
+    const syncTopbarState = () => {
+      const documentHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight,
+      );
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const topbarHeight = topbar instanceof HTMLElement ? topbar.offsetHeight : 0;
-      const scrollLine = window.scrollY + topbarHeight + 64;
+      const activationLine = scrollTop + topbarHeight + Math.min(viewportHeight * 0.22, 108);
+      const maxScroll = Math.max(documentHeight - viewportHeight, 0);
+      const atPageBottom = scrollTop + viewportHeight >= documentHeight - 2;
+      const progress =
+        maxScroll > 0 ? (atPageBottom ? 1 : Math.min(scrollTop / maxScroll, 1)) : 1;
       let activeId = "";
 
-      trackedSections.forEach(({ id, section }) => {
-        if (section.offsetTop <= scrollLine) {
+      trackedSections.forEach(({ id, section }, index) => {
+        if (atPageBottom) {
+          activeId = trackedSections[trackedSections.length - 1]?.id ?? "";
+          return;
+        }
+
+        const nextSectionTop =
+          trackedSections[index + 1]?.section.offsetTop ?? Number.POSITIVE_INFINITY;
+
+        if (activationLine >= section.offsetTop && activationLine < nextSectionTop) {
           activeId = id;
         }
+      });
+
+      const activeSegments =
+        progress <= 0
+          ? 0
+          : Math.min(
+              progressSegmentEls.length,
+              Math.ceil(progress * progressSegmentEls.length),
+            );
+
+      progressSegmentEls.forEach((segment, index) => {
+        if (!(segment instanceof HTMLElement)) {
+          return;
+        }
+
+        segment.classList.toggle("is-active", index < activeSegments);
       });
 
       setActiveNavLink(activeId);
@@ -505,7 +551,7 @@ const resumeHref = `${assetBase}resume.pdf`;
 
     const scheduleNavSync = () => {
       cancelAnimationFrame(navFrame);
-      navFrame = requestAnimationFrame(syncActiveNav);
+      navFrame = requestAnimationFrame(syncTopbarState);
     };
 
     const runTypewriter = () => {
