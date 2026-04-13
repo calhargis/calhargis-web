@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SkillIcon from "../components/SkillIcon.astro";
 import { siteData } from "../data/site";
 
 const assetBase = import.meta.env.BASE_URL.endsWith("/")
@@ -28,14 +29,15 @@ const resumeHref = `${assetBase}resume.pdf`;
         <span class="topbar__brand-mark">CH</span>
         <span class="topbar__brand-copy">
           <span>{siteData.hero.name}</span>
-          <span>{siteData.hero.role}</span>
+          <span>{siteData.hero.title}</span>
         </span>
       </a>
 
       <nav class="topbar__nav" aria-label="Primary">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
         <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
         <a href="#resume">Resume</a>
       </nav>
     </header>
@@ -43,10 +45,14 @@ const resumeHref = `${assetBase}resume.pdf`;
     <main>
       <section class="hero section" id="top">
         <div class="hero__copy reveal" data-reveal>
-          <p class="eyebrow">Synthwave signal / Developer portfolio</p>
-          <h1>{siteData.hero.headline}</h1>
-          <p class="hero__lede">{siteData.hero.summary}</p>
-          <p class="hero__status">{siteData.hero.status}</p>
+          <p class="eyebrow">Developer portfolio</p>
+          <h1 class="hero__name">{siteData.hero.name}</h1>
+          <div class="hero__typewriter" aria-label="Professional focus">
+            <span class="typewriter-text" id="typewriter"></span>
+            <span class="typewriter-cursor" aria-hidden="true">|</span>
+          </div>
+          <p class="hero__lede">{siteData.hero.intro}</p>
+          <p class="hero__summary">{siteData.hero.summary}</p>
 
           <div class="hero__actions">
             <a
@@ -57,7 +63,14 @@ const resumeHref = `${assetBase}resume.pdf`;
             >
               View Resume
             </a>
-            <a class="button button--ghost" href="#projects">Selected Work</a>
+            <a
+              class="button button--ghost"
+              href={siteData.links[1].href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn
+            </a>
             <a
               class="button button--ghost"
               href={siteData.links[0].href}
@@ -69,61 +82,83 @@ const resumeHref = `${assetBase}resume.pdf`;
           </div>
         </div>
 
-        <aside class="hero__panel reveal" data-reveal data-parallax>
-          <div class="hero__panel-header">
-            <p class="eyebrow">Current focus</p>
-            <p class="hero__panel-label">Build software that is dependable, expressive, and worth remembering.</p>
-          </div>
-
-          <div class="proof-grid">
-            {siteData.proofPoints.map((point) => (
-              <article class="proof-card">
-                <h2>{point.title}</h2>
-                <p>{point.detail}</p>
-              </article>
-            ))}
-          </div>
-        </aside>
-      </section>
-
-      <section class="section" id="about">
-        <div class="section-heading reveal" data-reveal>
-          <p class="eyebrow">About</p>
-          <h2>What companies should know quickly</h2>
-          <p>
-            I am most interested in roles where engineering quality matters as much as delivery speed.
-            The work I enjoy most lives around backend architecture, infrastructure-aware development,
-            developer tooling, and products with enough personality to stand out.
-          </p>
-        </div>
-
-        <div class="card-grid card-grid--three">
-          {siteData.focusAreas.map((area) => (
-            <article class="info-card reveal" data-reveal>
-              <h3>{area.title}</h3>
-              <p>{area.copy}</p>
+        <div class="hero__facts">
+          {siteData.hero.facts.map((fact) => (
+            <article class="fact-card reveal" data-reveal>
+              <p class="eyebrow">{fact.label}</p>
+              <h2>{fact.value}</h2>
             </article>
           ))}
         </div>
       </section>
 
-      <section class="section" id="skills">
+      <section class="section" id="experience">
         <div class="section-heading reveal" data-reveal>
-          <p class="eyebrow">Capabilities</p>
-          <h2>Technical strengths</h2>
+          <p class="eyebrow">Experience</p>
+          <h2>Recent work with the strongest emphasis on Kingsley</h2>
           <p>
-            My strongest work is usually at the intersection of system design, API behavior,
-            infrastructure, and the product surface developers or users actually touch.
+            My most relevant development experience is my current role at Kingsley,
+            where I am building full-stack production features across resident-facing
+            applications and internal management systems.
           </p>
         </div>
 
-        <div class="card-grid card-grid--three">
-          {siteData.skillGroups.map((group) => (
-            <article class="skill-card reveal" data-reveal>
-              <h3>{group.title}</h3>
-              <ul class="tag-list">
-                {group.items.map((item) => (
-                  <li>{item}</li>
+        <div class="experience-grid">
+          <article class="feature-card feature-card--primary reveal" data-reveal>
+            <div class="feature-card__meta">
+              <div>
+                <p class="feature-card__role">{siteData.experience.featured.role}</p>
+                <h3>{siteData.experience.featured.company}</h3>
+              </div>
+              <div class="meta-badges">
+                <span>{siteData.experience.featured.dates}</span>
+                <span>{siteData.experience.featured.location}</span>
+              </div>
+            </div>
+
+            <p class="feature-card__summary">
+              {siteData.experience.featured.summary}
+            </p>
+
+            <ul class="accent-list">
+              {siteData.experience.featured.achievements.map((achievement) => (
+                <li>{achievement}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="feature-card feature-card--spotlight reveal" data-reveal>
+            <p class="eyebrow">Feature spotlight</p>
+            <h3>{siteData.experience.featured.spotlight.title}</h3>
+            <p class="feature-card__summary">
+              {siteData.experience.featured.spotlight.impact}
+            </p>
+
+            <ul class="accent-list">
+              {siteData.experience.featured.spotlight.details.map((detail) => (
+                <li>{detail}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+
+        <div class="supporting-grid">
+          {siteData.experience.supporting.map((job) => (
+            <article class="feature-card reveal" data-reveal>
+              <div class="feature-card__meta">
+                <div>
+                  <p class="feature-card__role">{job.role}</p>
+                  <h3>{job.company}</h3>
+                </div>
+                <div class="meta-badges">
+                  <span>{job.dates}</span>
+                  <span>{job.location}</span>
+                </div>
+              </div>
+
+              <ul class="accent-list">
+                {job.bullets.map((bullet) => (
+                  <li>{bullet}</li>
                 ))}
               </ul>
             </article>
@@ -131,13 +166,54 @@ const resumeHref = `${assetBase}resume.pdf`;
         </div>
       </section>
 
+      <section class="section" id="education">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">Education</p>
+          <h2>Computer science foundation</h2>
+          <p>
+            My formal background is a B.S. in Computer Science from BYU, with coursework
+            that maps directly to software engineering, testing, UX, algorithms, and machine learning.
+          </p>
+        </div>
+
+        <div class="education-grid">
+          <article class="feature-card reveal" data-reveal>
+            <div class="feature-card__meta">
+              <div>
+                <p class="feature-card__role">{siteData.education.degree}</p>
+                <h3>{siteData.education.school}</h3>
+              </div>
+              <div class="meta-badges">
+                <span>{siteData.education.graduation}</span>
+                <span>{siteData.education.location}</span>
+              </div>
+            </div>
+
+            <p class="feature-card__summary">
+              Relevant coursework from the degree is listed below and reflects the areas I have spent the most time building on since graduation.
+            </p>
+
+            <ul class="tag-list">
+              {siteData.education.coursework.map((course) => (
+                <li>{course}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="feature-card reveal" data-reveal>
+            <p class="eyebrow">Conference presentation</p>
+            <h3>{siteData.presentation.title}</h3>
+            <p class="feature-card__summary">{siteData.presentation.description}</p>
+          </article>
+        </div>
+      </section>
+
       <section class="section" id="projects">
         <div class="section-heading reveal" data-reveal>
-          <p class="eyebrow">Selected work</p>
-          <h2>Projects that show how I think</h2>
+          <p class="eyebrow">Projects</p>
+          <h2>Software projects and published research</h2>
           <p>
-            These projects are a good snapshot of the kind of engineering work I enjoy:
-            solid systems, useful tooling, and ideas with enough edge to be memorable.
+            After my professional experience and education, these projects and publications give a broader picture of how I work.
           </p>
         </div>
 
@@ -163,66 +239,60 @@ const resumeHref = `${assetBase}resume.pdf`;
               </ul>
             </article>
           ))}
-
-          <article class="project-card project-card--profile reveal" data-reveal>
-            <div class="project-card__header">
-              <div>
-                <p class="project-card__stack">More work</p>
-                <h3>GitHub profile</h3>
-              </div>
-              <a href={siteData.links[0].href} target="_blank" rel="noreferrer">
-                Browse
-              </a>
-            </div>
-
-            <p class="project-card__summary">
-              For more experiments, repos, and in-progress work, my GitHub profile is the best live index.
-            </p>
-
-            <div class="project-card__cta-row">
-              <a class="button button--ghost" href={siteData.links[0].href} target="_blank" rel="noreferrer">
-                Explore GitHub
-              </a>
-              <a class="button button--ghost" href={siteData.links[1].href} target="_blank" rel="noreferrer">
-                View LinkedIn
-              </a>
-            </div>
-          </article>
         </div>
-      </section>
 
-      <section class="section section--split" id="highlights">
-        <div class="section-heading reveal" data-reveal>
-          <p class="eyebrow">Highlights</p>
-          <h2>Execution patterns I bring to teams</h2>
+        <div class="section-heading section-heading--sub reveal" data-reveal>
+          <p class="eyebrow">Publications</p>
+          <h2>Research papers</h2>
           <p>
-            The common thread in my work is not just shipping features. It is turning complex ideas into
-            systems that are easier to reason about, test, operate, and evolve.
+            These publications came out of my BYU research work and are linked directly here for quick review.
           </p>
         </div>
 
-        <div class="split-grid">
-          <article class="info-card reveal" data-reveal>
-            <h3>Recent accomplishments</h3>
-            <ul class="accent-list">
-              {siteData.accomplishments.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </article>
+        <div class="publication-grid">
+          {siteData.publications.map((publication) => (
+            <article class="feature-card publication-card reveal" data-reveal>
+              <p class="eyebrow">{publication.venue}</p>
+              <h3>{publication.title}</h3>
+              <p class="feature-card__summary">{publication.description}</p>
+              <a
+                class="button button--ghost"
+                href={publication.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Read Paper
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
 
-          <article class="info-card info-card--quote reveal" data-reveal>
-            <p class="eyebrow">Working style</p>
-            <h3>Practical, direct, and quality-minded.</h3>
-            <p>
-              I like strong defaults, explicit tradeoffs, and software that keeps its shape as it grows.
-              If something should feel faster, clearer, or more intentional, I usually want to push it there.
-            </p>
-            <p>
-              That applies to backend behavior, developer workflows, and the front-end details that make a product
-              feel considered instead of assembled.
-            </p>
-          </article>
+      <section class="section" id="skills">
+        <div class="section-heading reveal" data-reveal>
+          <p class="eyebrow">Skills</p>
+          <h2>Skills and tech stack</h2>
+          <p>
+            This section mirrors the skills-and-stack treatment you pointed at, but tuned to your resume, experience, and the synthwave look of this site.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          {siteData.skills.map((group) => (
+            <article class="feature-card skill-category-card reveal" data-reveal>
+              <h3 class="skill-category-card__title">{group.title}</h3>
+              <ul class="skill-list">
+                {group.items.map((item) => (
+                  <li class="skill-pill">
+                    <span class="skill-pill__icon" aria-hidden="true">
+                      <SkillIcon icon={item.icon} />
+                    </span>
+                    <span>{item.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -252,7 +322,7 @@ const resumeHref = `${assetBase}resume.pdf`;
     </main>
 
     <footer class="footer">
-      <p>Built with Astro and deployed as a static site.</p>
+      <p>Cal Hargis · Full-Stack Software Developer</p>
       <div class="footer__links">
         {siteData.links.map((link) => (
           <a href={link.href} target="_blank" rel="noreferrer">{link.label}</a>
@@ -261,12 +331,57 @@ const resumeHref = `${assetBase}resume.pdf`;
     </footer>
   </div>
 
-  <script is:inline>
+  <script is:inline define:vars={{ typePhrases: siteData.hero.typePhrases }}>
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealItems = document.querySelectorAll("[data-reveal]");
+    const glowButtons = document.querySelectorAll(".button");
+    const typewriterEl = document.getElementById("typewriter");
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let pauseEnd = 0;
+
+    const runTypewriter = () => {
+      if (!(typewriterEl instanceof HTMLElement) || !typePhrases.length) {
+        return;
+      }
+
+      const now = Date.now();
+      if (now < pauseEnd) {
+        requestAnimationFrame(runTypewriter);
+        return;
+      }
+
+      const current = typePhrases[phraseIndex];
+
+      if (!deleting) {
+        typewriterEl.textContent = current.slice(0, charIndex + 1);
+        charIndex += 1;
+
+        if (charIndex === current.length) {
+          deleting = true;
+          pauseEnd = now + 1800;
+        }
+      } else {
+        charIndex -= 1;
+        typewriterEl.textContent = current.slice(0, charIndex);
+
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % typePhrases.length;
+          pauseEnd = now + 350;
+        }
+      }
+
+      const speed = deleting ? 34 : 60;
+      setTimeout(() => requestAnimationFrame(runTypewriter), speed);
+    };
 
     if (prefersReducedMotion) {
       revealItems.forEach((item) => item.classList.add("is-visible"));
+      if (typewriterEl instanceof HTMLElement && typePhrases.length) {
+        typewriterEl.textContent = typePhrases[0];
+      }
     } else {
       const observer = new IntersectionObserver(
         (entries) => {
@@ -278,24 +393,38 @@ const resumeHref = `${assetBase}resume.pdf`;
           });
         },
         {
-          threshold: 0.18,
-          rootMargin: "0px 0px -40px 0px",
+          threshold: 0.16,
+          rootMargin: "0px 0px -36px 0px",
         },
       );
 
       revealItems.forEach((item) => observer.observe(item));
 
-      const panel = document.querySelector("[data-parallax]");
-
-      if (panel instanceof HTMLElement) {
-        window.addEventListener("pointermove", (event) => {
-          const x = (event.clientX / window.innerWidth - 0.5) * 10;
-          const y = (event.clientY / window.innerHeight - 0.5) * -10;
-
-          panel.style.setProperty("--tilt-x", `${x.toFixed(2)}deg`);
-          panel.style.setProperty("--tilt-y", `${y.toFixed(2)}deg`);
-        });
+      if (typewriterEl instanceof HTMLElement && typePhrases.length) {
+        requestAnimationFrame(runTypewriter);
       }
     }
+
+    glowButtons.forEach((button) => {
+      if (!(button instanceof HTMLElement)) {
+        return;
+      }
+
+      const updateGlow = (event) => {
+        const rect = button.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        button.style.setProperty("--glow-x", `${x}px`);
+        button.style.setProperty("--glow-y", `${y}px`);
+        button.classList.add("is-glow-active");
+      };
+
+      button.addEventListener("pointerenter", updateGlow);
+      button.addEventListener("pointermove", updateGlow);
+      button.addEventListener("pointerleave", () => {
+        button.classList.remove("is-glow-active");
+      });
+    });
   </script>
 </BaseLayout>
